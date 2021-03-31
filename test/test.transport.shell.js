@@ -204,6 +204,20 @@ describe('transport/shell', function() {
         testDone();
       });
     });
+
+    it('should ok if socket', function(testDone) {
+      runWithinFiber(function() {
+
+        var shell = new Shell(CONTEXT);
+
+        shell._exec('ls -l', { socket: console.log });
+
+        expect(CHILD_PROCESS_SPY.calledOnce).to.be.true;
+        expect(CHILD_PROCESS_SPY.lastCall.args[1].maxBuffer).to.equal(1000 * 1024);
+
+        testDone();
+      });
+    });
   });
 
   describe('#transfer()', function() {
